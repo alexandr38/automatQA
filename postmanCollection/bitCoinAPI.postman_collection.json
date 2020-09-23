@@ -1,0 +1,807 @@
+{
+	"info": {
+		"_postman_id": "b42146ee-0349-4afa-8f2a-04a826896e62",
+		"name": "bitCoinAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "createWallet - create sender",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21d3082a-98c9-4087-bcce-41eb0ad18284",
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"pm.environment.set(\"senderWalletId\", responseJson.wallet_id );\r",
+							"pm.environment.set(\"senderWalletIdHash\", responseJson.wallet_id_hash );\r",
+							"\r",
+							"pm.test(\"Status test 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is JSON\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body contains \\\"wallet_id\\\"\",() => {\r",
+							"  pm.expect(pm.response.text()).to.includes(\"\\\"wallet_id\\\"\");\r",
+							"});\r",
+							"\r",
+							"pm.test(`Body contains currency = ${pm.variables.get('currency').toUpperCase()}`, () => {\r",
+							"  //const responseJson = pm.response.json();  \r",
+							"  const crncy = responseJson.currency;\r",
+							"  pm.expect(crncy).to.equal( pm.variables.get('currency').toUpperCase());\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "c4b84cae-5bad-48a4-ba65-760b08406bb4",
+						"exec": [
+							"let d = new Date();\r",
+							"const unixtime = d.valueOf();\r",
+							"\r",
+							"pm.environment.set(\"dateFrom\", unixtime);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/create/wallet",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"create",
+						"wallet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createWallet - create recipient",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5d748065-a81a-4b2e-96f1-6632d42b9021",
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"pm.environment.set(\"recipientWalletId\", responseJson.wallet_id );\r",
+							"\r",
+							"pm.test(\"Status test 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is JSON\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body contains \\\"wallet_id\\\"\",() => {\r",
+							"  pm.expect(pm.response.text()).to.includes(\"\\\"wallet_id\\\"\");\r",
+							"});\r",
+							"\r",
+							"pm.test(`Body contains currency = ${pm.variables.get('currency').toUpperCase()}`, () => {\r",
+							"  //const responseJson = pm.response.json();  \r",
+							"  const crncy = responseJson.currency;\r",
+							"  pm.expect(crncy).to.equal( pm.variables.get('currency').toUpperCase());\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/create/wallet",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"create",
+						"wallet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createWalletPaymentAddress - recipientAddres_notValidCurrency",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3cded596-6e76-4a39-8b93-8fc76670d06b",
+						"exec": [
+							"pm.test(\"Status test 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is JSON\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"error_code = 7\",() => {\r",
+							"  const responseJson = pm.response.json();  \r",
+							"  const errCode = responseJson.error_code;\r",
+							"  pm.expect(errCode).to.equal(7);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"error message \\\"invalid wallet id\\\" \", () => {\r",
+							"  const responseJson = pm.response.json();  \r",
+							"  const message = responseJson.message;\r",
+							"  pm.expect(message).to.equal(\"invalid wallet id\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "97b0801e-1e80-4c9b-b14f-031bb5bbb02d",
+						"exec": [
+							"\r",
+							"if( pm.environment.get(\"currency\") == \"btc\" || pm.environment.get(\"currency\") == \"BTC\" ){\r",
+							"    pm.environment.set(\"currency\", \"eth\" );\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"wallet_id\":\"{{recipientWalletId}}\",\r\n    \"callback_link\":\"http:all\",\r\n    \"confirmations\":\"1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/create/wallet/payment/address",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"create",
+						"wallet",
+						"payment",
+						"address"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createWalletPaymentAddress - recipient",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ef2626f5-859e-428b-9d41-10c22d6f9c8b",
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"pm.environment.set(\"recipientWalletAddress\", responseJson.address );\r",
+							"\r",
+							"pm.test(\"Status test 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is JSON\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body contains \\\"address\\\"\",() => {\r",
+							"  pm.expect(pm.response.text()).to.includes(\"\\\"address\\\"\");\r",
+							"});\r",
+							"\r",
+							"pm.test(`Body contains currency = ${pm.variables.get('currency').toUpperCase()}`, () => {\r",
+							"  //const responseJson = pm.response.json();  \r",
+							"  const crncy = responseJson.currency;\r",
+							"  pm.expect(crncy).to.equal( pm.variables.get('currency').toUpperCase());\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "9ca6e203-a2b0-4517-836c-78856c767e16",
+						"exec": [
+							"\r",
+							"if( pm.environment.get(\"currency\") == \"eth\" || pm.environment.get(\"currency\") == \"ETH\" ){\r",
+							"    pm.environment.set(\"currency\", \"btc\" );\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"wallet_id\":\"{{recipientWalletId}}\",\r\n    \"callback_link\":\"http:all\",\r\n    \"confirmations\":\"1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/create/wallet/payment/address",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"create",
+						"wallet",
+						"payment",
+						"address"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getWalletState - sender",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0b2dc298-7b86-4896-a275-0b4f0654c66d",
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status test 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is JSON\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body contains \\\"wallet_id_hash\\\"\",() => {\r",
+							"  pm.expect(pm.response.text()).to.includes(\"\\\"wallet_id_hash\\\"\");\r",
+							"});\r",
+							"\r",
+							"pm.test(`Body contains wallet_id_hash = ${pm.variables.get('senderWalletIdHash')}`, () => {\r",
+							"  const hash = responseJson.wallet_id_hash;\r",
+							"  pm.expect(hash).to.equal( pm.variables.get('senderWalletIdHash'));\r",
+							"});\r",
+							"\r",
+							"pm.test(`Body contains currency = ${pm.variables.get('currency').toUpperCase()}`, () => {\r",
+							"  const crncy = responseJson.currency;\r",
+							"  pm.expect(crncy).to.equal( pm.variables.get('currency').toUpperCase());\r",
+							"});\r",
+							"\r",
+							"pm.test( \"address_count=0, для него не создавали адрес\", ()=> {\r",
+							"    const addrCount = responseJson.address_count;\r",
+							"    pm.expect(addrCount).to.equals(0);\r",
+							"});\r",
+							"\r",
+							"pm.test( \"balance_amount = 0, новый, не пополнялся\", ()=> {\r",
+							"    const balance = responseJson.balance_amount;\r",
+							"    pm.expect(balance).to.equals(0);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/wallet/state/{{senderWalletId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"wallet",
+						"state",
+						"{{senderWalletId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getWalletTransactions - sender",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21342d8a-211e-426e-9b40-bb79591eece2",
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status test 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is JSON\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"transaction is empty\", () => {\r",
+							"  const size = responseJson.transactions.tx_list.length;\r",
+							"  pm.expect(size).to.equals(0);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"pending_transaction is empty\", () => {\r",
+							"  const size = responseJson.pending_transactions.tx_list.length;\r",
+							"  pm.expect(size).to.equals(0);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "12724863-2c84-402c-8b23-d78773cded90",
+						"exec": [
+							"let d = new Date();\r",
+							"const unixtime = d.valueOf();\r",
+							"\r",
+							"pm.environment.set(\"dateTo\", unixtime);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/wallet/transactions/{{senderWalletId}}?from={{dateFrom}}&to={{dateTo}}&limit=10&page=1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"wallet",
+						"transactions",
+						"{{senderWalletId}}"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "{{dateFrom}}",
+							"description": "optional"
+						},
+						{
+							"key": "to",
+							"value": "{{dateTo}}",
+							"description": "optional"
+						},
+						{
+							"key": "limit",
+							"value": "10",
+							"description": "optional"
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"description": "optional"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getWalletDailyStatistic - sender",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f7040c44-e011-4326-a6f8-f2cfcb76869c",
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status test 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is JSON\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"day_list is empty\", () => {\r",
+							"  const size = responseJson.day_list.length;\r",
+							"  pm.expect(size).to.equals(0);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "29fe21bc-e0b6-4746-b633-56e4cccc5ec5",
+						"exec": [
+							"let d = new Date();\r",
+							"const unixtime = d.valueOf();\r",
+							"\r",
+							"pm.environment.set(\"dateTo\", unixtime);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/wallet/daily/statistic/{{senderWalletId}}?from={{dateFrom}}&to={{dateTo}}&limit=10&page=1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"wallet",
+						"daily",
+						"statistic",
+						"{{senderWalletId}}"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "{{dateFrom}}",
+							"description": "optional"
+						},
+						{
+							"key": "to",
+							"value": "{{dateTo}}",
+							"description": "optional"
+						},
+						{
+							"key": "limit",
+							"value": "10",
+							"description": "optional"
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"description": "optional"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getWalletAddresses - recipientAddress",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3f463d6e-c579-457b-a0b5-f0c61fe518b1",
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status test 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is JSON\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test(`address contains ${pm.variables.get('recipientWalletAddress')}`, () => {\r",
+							"  const addr = responseJson.address_list[0].address;\r",
+							"  pm.expect(addr).to.equal( pm.variables.get('recipientWalletAddress'));\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f2498f25-dc78-4aaa-a898-2fe63c587975",
+						"exec": [
+							"let d = new Date();\r",
+							"const unixtime = d.valueOf();\r",
+							"\r",
+							"pm.environment.set(\"dateTo\", unixtime);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/wallet/addresses/{{recipientWalletId}}?from={{dateFrom}}&to={{dateTo}}&limit=10&page=1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"wallet",
+						"addresses",
+						"{{recipientWalletId}}"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "{{dateFrom}}"
+						},
+						{
+							"key": "to",
+							"value": "{{dateTo}}"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getWalletAddresseTransaction",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "048eff93-d6c5-45e9-a9e6-92b75cdfe14a",
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status test 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is JSON\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"transaction is empty\", () => {\r",
+							"  const size = responseJson.transactions.tx_list.length;\r",
+							"  pm.expect(size).to.equals(0);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"pending_transaction is empty\", () => {\r",
+							"  const size = responseJson.pending_transactions.tx_list.length;\r",
+							"  pm.expect(size).to.equals(0);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "acc75fc2-9611-43a1-b8da-eee0b2325f64",
+						"exec": [
+							"let d = new Date();\r",
+							"const unixtime = d.valueOf();\r",
+							"\r",
+							"pm.environment.set(\"dateTo\", unixtime);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/wallet/address/transactions/{{recipientWalletId}}/{{recipientWalletAddress}}?from={{dateFrom}}&to={{dateTo}}&limit=10&page=1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"wallet",
+						"address",
+						"transactions",
+						"{{recipientWalletId}}",
+						"{{recipientWalletAddress}}"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "{{dateFrom}}"
+						},
+						{
+							"key": "to",
+							"value": "{{dateTo}}"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sendPayment - badRequest_not_funds",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "198ed5f4-fdb0-4024-9c98-056ce26a60a8",
+						"exec": [
+							"pm.test(\"Status test 403\", function () {\r",
+							"    pm.response.to.have.status(403);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is JSON\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"error_code = 22\",() => {\r",
+							"  const responseJson = pm.response.json();  \r",
+							"  const errCode = responseJson.error_code;\r",
+							"  pm.expect(errCode).to.equal(22);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"error message \\\"not enough funds\\\" \", () => {\r",
+							"  const responseJson = pm.response.json();  \r",
+							"  const message = responseJson.message;\r",
+							"  pm.expect(message).to.equal(\"not enough funds\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"receivers_list\" : [{\"address\":\"{{recipientWalletAddress}}\", \"amount\":10000}],\r\n\"message\":{\"format\": \"text\", \"payload\": \"test payments\"}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/wallet/send/payment/{{senderWalletId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"wallet",
+						"send",
+						"payment",
+						"{{senderWalletId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
