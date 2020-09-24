@@ -4,7 +4,7 @@ jest.setTimeout(30000);
 let browser;
 
 const homePageUrl = 'https://www.w3schools.com/html/html_iframe.asp';
-const frameTopMenuJavaScript = '#topnav > div > div.w3-bar.w3-left > a:nth-child(5)';
+const frameTopMenuJavaScript = '#topnav div.w3-bar.w3-left>.w3-bar-item.w3-button[title="JavaScript Tutorial"]';//'#topnav > div > div.w3-bar.w3-left > a:nth-child(5)';
 const javaScriptTutorial = '#main > h1';
 
 beforeAll(async () => {
